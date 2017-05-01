@@ -1,0 +1,15 @@
+﻿  Assets\graund1m.FBX
+  Assets\skydome.FBX
+  Assets\skydome_5-2.FBX
+  Assets\skydome_5.FBX
+  pch.cpp
+  DebugCamera.cpp
+  Game.cpp
+Game.cpp(53): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+  Main.cpp
+     ライブラリ C:\Users\s162195\Documents\GameEndine\GameEngineTK\Release\GameEngineTK.lib とオブジェクト C:\Users\s162195\Documents\GameEndine\GameEngineTK\Release\GameEngineTK.exp を作成中
+  コード生成しています。
+  All 403 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  コード生成が終了しました。
+  GameEngineTK.vcxproj -> C:\Users\s162195\Documents\GameEndine\GameEngineTK\Release\GameEngineTK.exe
+  GameEngineTK.vcxproj -> C:\Users\s162195\Documents\GameEndine\GameEngineTK\Release\GameEngineTK.pdb (Full PDB)
