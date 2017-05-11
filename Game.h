@@ -6,6 +6,7 @@
 
 #include "StepTimer.h"
 #include "DebugCamera.h"
+#include "Camera.h"
 
 #include <PrimitiveBatch.h>
 #include <VertexTypes.h>
@@ -13,6 +14,7 @@
 #include <CommonStates.h>
 #include <SimpleMath.h>
 #include <Model.h>
+#include <Keyboard.h>
 
 
 // A basic game implementation that creates a D3D11 device and
@@ -88,11 +90,40 @@ private:
 	std::unique_ptr<DirectX::Model> m_skydome_model;
 	//球モデル
 	std::unique_ptr<DirectX::Model> m_ball_model;
+	//タンクモデル
+	std::unique_ptr<DirectX::Model> m_tank_model;
+	//ティーポットモデル
+	std::unique_ptr<DirectX::Model> m_tea_model;
+	//ティーポットのワールド行列（外側）
+	DirectX::SimpleMath::Matrix m_world_tea[20];
+	//ティーポットの位置座標
+	float rad[20];
+	//原点からのティーポットの距離
+	float distance[20];
+	float rotate;
+	float scale;
+
+	//キーボード
+	std::unique_ptr<DirectX::Keyboard>keyboard;
+
+	//自機の座標
+	DirectX::SimpleMath::Matrix tank_world;
+	DirectX::SimpleMath::Vector3 tank_pos;
+
+	float tank_rotate;
+
+
+
+
 	//球のワールド行列
 	DirectX::SimpleMath::Matrix m_worldBall;
 	//球のワールド行列（内側）
 	DirectX::SimpleMath::Matrix m_world_ball_in[10];
 	//球のワールド行列（外側）
 	DirectX::SimpleMath::Matrix m_world_ball_out[10];
+
+	//カメラ
+	std::unique_ptr<Camera> m_camera;
+
 
 };

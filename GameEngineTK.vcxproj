@@ -164,12 +164,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="DebugCamera.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="StepTimer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DebugCamera.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -196,9 +198,12 @@
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Assets\graund1m.FBX" />
+    <MeshContentTask Include="Assets\graund200m.FBX" />
+    <MeshContentTask Include="Assets\model.FBX" />
     <MeshContentTask Include="Assets\skydome.FBX" />
     <MeshContentTask Include="Assets\skydome_5-2.FBX" />
     <MeshContentTask Include="Assets\skydome_5.FBX" />
+    <MeshContentTask Include="Assets\teapot.FBX" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

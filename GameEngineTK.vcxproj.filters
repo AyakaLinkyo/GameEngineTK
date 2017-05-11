@@ -11,12 +11,14 @@
     <ClInclude Include="StepTimer.h" />
     <ClInclude Include="DebugCamera.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Camera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="DebugCamera.cpp" />
+    <ClCompile Include="Camera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
@@ -42,6 +44,15 @@
       <Filter>Assets</Filter>
     </MeshContentTask>
     <MeshContentTask Include="Assets\skydome_5-2.FBX">
+      <Filter>Assets</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\graund200m.FBX">
+      <Filter>Assets</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\teapot.FBX">
+      <Filter>Assets</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model.FBX">
       <Filter>Assets</Filter>
     </MeshContentTask>
   </ItemGroup>
