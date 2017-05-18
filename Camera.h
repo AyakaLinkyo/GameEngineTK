@@ -16,14 +16,30 @@ public:
 	Camera(int width, int height);
 	virtual ~Camera();
 	//更新
-	void Update();
+	virtual void Update();
 
 	//ビュー行列を取得する関数
-	DirectX::SimpleMath::Matrix GetViewMatrix();
+	const DirectX::SimpleMath::Matrix& GetViewMatrix();
 	//射影行列を取得する関数
-	DirectX::SimpleMath::Matrix GetProjMatrix();
+	const DirectX::SimpleMath::Matrix& GetProjMatrix();
 	//視点をセット
-	void SetEyepos(DirectX::SimpleMath::Vector3 eyepos);
+	void SetEyepos(const DirectX::SimpleMath::Vector3& eyepos);
+	//参照点をセット
+	void SetRefpos(const DirectX::SimpleMath::Vector3& refpos);
+	//上方向ベクトルをセット
+	void SetUppos(const DirectX::SimpleMath::Vector3& uppos);
+
+	//垂直方向視野角をセット
+	void SetForY(float fovY);
+
+	//垂直方向視野角をセット
+	void SetAspect(float aspect);
+
+	//垂直方向視野角をセット
+	void SetNearClip(float nearclip);
+
+	//垂直方向視野角をセット
+	void SetFarClip(float farclip);
 
 protected:
 	//ビュー行列

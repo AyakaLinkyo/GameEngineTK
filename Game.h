@@ -7,6 +7,7 @@
 #include "StepTimer.h"
 #include "DebugCamera.h"
 #include "Camera.h"
+#include "FollowCamera.h"
 
 #include <PrimitiveBatch.h>
 #include <VertexTypes.h>
@@ -123,7 +124,7 @@ private:
 	DirectX::SimpleMath::Matrix m_world_ball_out[10];
 
 	//ÉJÉÅÉâ
-	std::unique_ptr<Camera> m_camera;
+	std::unique_ptr<FollowCamera> m_camera;
 
 
 };

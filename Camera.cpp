@@ -65,23 +65,53 @@ void Camera::Update()
 
 }
 
-DirectX::SimpleMath::Matrix Camera::GetViewMatrix()
+const DirectX::SimpleMath::Matrix& Camera::GetViewMatrix()
 {	
-	//ビュー行列を作成
-	view = Matrix::CreateLookAt(eyepos, refpos, upvec);
+	////ビュー行列を作成
+	//view = Matrix::CreateLookAt(eyepos, refpos, upvec);
 
 	return view;
 }
 
-DirectX::SimpleMath::Matrix Camera::GetProjMatrix()
+const DirectX::SimpleMath::Matrix& Camera::GetProjMatrix()
 {
-	//射影行列の生成（透視投影用）
-	proj = Matrix::CreatePerspectiveFieldOfView(fovY, aspect, nearclip, farclip);
+	////射影行列の生成（透視投影用）
+	//proj = Matrix::CreatePerspectiveFieldOfView(fovY, aspect, nearclip, farclip);
 
 	return proj;
 }
 
-void Camera::SetEyepos(DirectX::SimpleMath::Vector3 eyepos)
+void Camera::SetEyepos(const DirectX::SimpleMath::Vector3& eyepos)
 {
 	this->eyepos = eyepos;
+}
+
+void Camera::SetRefpos(const DirectX::SimpleMath::Vector3 & refpos)
+{
+	this->refpos = refpos;
+}
+
+void Camera::SetUppos(const DirectX::SimpleMath::Vector3 & uppos)
+{
+	this->upvec = uppos;
+}
+
+void Camera::SetForY(float fovY)
+{
+	this->fovY = fovY;
+}
+
+void Camera::SetAspect(float aspect)
+{
+	this->aspect = aspect;
+}
+
+void Camera::SetNearClip(float nearclip)
+{
+	this->nearclip = nearclip;
+}
+
+void Camera::SetFarClip(float farclip)
+{
+	this->farclip = farclip;
 }

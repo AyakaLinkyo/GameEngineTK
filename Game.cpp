@@ -102,7 +102,7 @@ void Game::Initialize(HWND window, int width, int height)
 	tank_rotate = 0.0f;
 
 	//カメラの生成
-	m_camera = std::make_unique<Camera>(m_outputWidth,m_outputHeight);
+	m_camera = std::make_unique<FollowCamera>(m_outputWidth,m_outputHeight);
 }
 
 // Executes the basic game loop.
@@ -128,11 +128,14 @@ void Game::Update(DX::StepTimer const& timer)
 
 	//毎フレーム更新処理
 	m_debugCamera->Update();
-	m_camera->Update();
 	//自機にカメラ視点がついてくる
-	m_camera->SetEyepos(tank_pos);
-	m_view = m_camera->GetViewMatrix();
-	m_proj = m_camera->GetProjMatrix();
+	{
+		m_camera->Set_target_pos(tank_pos);
+		m_camera->Set_target_rotate(tank_rotate);
+		m_camera->Update();
+		m_view = m_camera->GetViewMatrix();
+		m_proj = m_camera->GetProjMatrix();
+	}
 
 	////どこから見るのか（視点）
 	//Vector3 eyepos(0, 0, 5);
