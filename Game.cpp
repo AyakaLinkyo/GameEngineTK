@@ -44,6 +44,19 @@ void Game::Initialize(HWND window, int width, int height)
 
 
 	//初期化はここに書く
+
+	//きーぼーどの初期化
+	keyboard = std::make_unique<Keyboard>();
+	tank_rotate = 0.0f;
+
+	//カメラの生成
+	m_Camera = std::make_unique<FollowCamera>(m_outputWidth, m_outputHeight);
+
+	//カメラにキーボードをセット
+	m_Camera->SetKeyboard(keyboard.get());
+
+	Obj3d::InitializeStatic(m_d3dDevice, m_d3dContext, m_Camera.get());
+
 	//PrimitiveBatchの初期化
 	m_batch = std::make_unique<PrimitiveBatch<VertexPositionColor>>(m_d3dContext.Get());
 
@@ -77,33 +90,15 @@ void Game::Initialize(HWND window, int width, int height)
 	//テクスチャの読み込みパス指定
 	m_factory->SetDirectory(L"Resources");
 	//モデルの読み込み
-	m_model = Model::CreateFromCMO(m_d3dDevice.Get(), L"Resources/graund200m.cmo", *m_factory);
+	m_obj_ground.LoadModel(L"Resources/graund200m.cmo");
 	//天球モデルの読み込み
-	m_skydome_model = Model::CreateFromCMO(m_d3dDevice.Get(), L"Resources/skydome.cmo", *m_factory);
-	//球モデルの読み込み
-	m_ball_model = Model::CreateFromCMO(m_d3dDevice.Get(), L"Resources/skydome_5-2.cmo", *m_factory);
-	//ティーポットの読み込み
-	m_tea_model = Model::CreateFromCMO(m_d3dDevice.Get(), L"Resources/teapot.cmo", *m_factory);
+	m_obj_skydome.LoadModel(L"Resources/skydome.cmo");
+	////球モデルの読み込み
+	//m_ball_model = Model::CreateFromCMO(m_d3dDevice.Get(), L"Resources/skydome_5-2.cmo", *m_factory);
+	////ティーポットの読み込み
+	//m_tea_model = Model::CreateFromCMO(m_d3dDevice.Get(), L"Resources/teapot.cmo", *m_factory);
 
-	//タンクポットの読み込み
-	m_tank_model = Model::CreateFromCMO(m_d3dDevice.Get(), L"Resources/model.cmo", *m_factory);
-
-	for (int i = 0; i < 20; i++)
-	{
-		rad[i] = rand() % 360;
-		distance[i] = rand() % 100;
-	}
-
-	rotate = 0;
-	scale = 1.0f;
-
-	//きーぼーどの初期化
-	keyboard = std::make_unique<Keyboard>();
-	tank_rotate = 0.0f;
-
-	//カメラの生成
-	m_camera = std::make_unique<FollowCamera>(m_outputWidth,m_outputHeight);
-	m_camera->Set_keyboard(keyboard.get());
+	m_player = std::make_unique<Player>(keyboard.get());
 }
 
 // Executes the basic game loop.
@@ -131,12 +126,17 @@ void Game::Update(DX::StepTimer const& timer)
 	m_debugCamera->Update();
 	//自機にカメラ視点がついてくる
 	{
-		m_camera->Set_target_pos(tank_pos);
-		m_camera->Set_target_rotate(tank_rotate);
-		m_camera->Update();
-		m_view = m_camera->GetViewMatrix();
-		m_proj = m_camera->GetProjMatrix();
+		m_Camera->SetTargetPos(m_player->Get_transmat());
+		m_Camera->SetTargetAngle(m_player->Get_rotate());
+		m_Camera->Update();
+		m_view = m_Camera->GetViewMatrix();
+		m_proj = m_Camera->GetProjectionMatrix();
 	}
+
+	m_player->Update();
+
+	m_obj_skydome.Update();
+	m_obj_ground.Update();
 
 	////どこから見るのか（視点）
 	//Vector3 eyepos(0, 0, 5);
@@ -160,43 +160,43 @@ void Game::Update(DX::StepTimer const& timer)
 	////射影行列の生成（透視投影用）
 	//m_proj = Matrix::CreatePerspectiveFieldOfView(fovY, aspect, nearclip, farclip);
 
-	//キーボードの情報取得
-	Keyboard::State key = keyboard->GetState();
+	////キーボードの情報取得
+	//Keyboard::State key = keyboard->GetState();
 
-	//Aキーが押されたら
-	if (key.A)
-	{
-		tank_rotate += 0.03;
-	}
-	//Dキーが押されたら
-	if (key.D)
-	{
-		tank_rotate -= 0.03;
-	}
-	//Wキーが押されたら
-	if (key.W)
-	{
-		Vector3 moveV(0, 0, -0.1f);
-		moveV = Vector3::TransformNormal(moveV, tank_world);
-		tank_pos += moveV;
-	}
-	//Sキーが押されたら
-	if (key.S)
-	{
-		Vector3 moveV(0, 0, 0.1f);
-		moveV = Vector3::TransformNormal(moveV, tank_world);
-		tank_pos += moveV;
-	}
-	//タンクのワールド行列を計算
-	{
-		Matrix transmat = Matrix::CreateTranslation(tank_pos);
-		Matrix rotmat = Matrix::CreateRotationY(tank_rotate);
+	////Aキーが押されたら
+	//if (key.A)
+	//{
+	//	tank_rotate += 0.03;
+	//}
+	////Dキーが押されたら
+	//if (key.D)
+	//{
+	//	tank_rotate -= 0.03;
+	//}
+	////Wキーが押されたら
+	//if (key.W)
+	//{
+	//	Vector3 moveV(0, 0, -0.1f);
+	//	moveV = Vector3::TransformNormal(moveV, tank_world);
+	//	tank_pos += moveV;
+	//}
+	////Sキーが押されたら
+	//if (key.S)
+	//{
+	//	Vector3 moveV(0, 0, 0.1f);
+	//	moveV = Vector3::TransformNormal(moveV, tank_world);
+	//	tank_pos += moveV;
+	//}
+	////タンクのワールド行列を計算
+	//{
+	//	Matrix transmat = Matrix::CreateTranslation(tank_pos);
+	//	Matrix rotmat = Matrix::CreateRotationY(tank_rotate);
 
-		tank_world = rotmat*transmat;
-	}
+	//	tank_world = rotmat*transmat;
+	//}
 
-	//球のワールド座標を計算
-	Matrix scalemat = Matrix::CreateScale(scale);
+	////球のワールド座標を計算
+	//Matrix scalemat = Matrix::CreateScale(scale);
 
 	//XMConvertToRadians(度数)：度をラジアン値に変換
 	//ロール
@@ -296,13 +296,17 @@ void Game::Render()
 	m_d3dContext->IASetInputLayout(m_inputLayout.Get());
 
 	////天球モデルの描画
-	m_skydome_model->Draw(m_d3dContext.Get(), m_states, m_world, m_view, m_proj);
+	//m_skydome_model->Draw(m_d3dContext.Get(), m_states, m_world, m_view, m_proj);
+	m_obj_skydome.Draw();
 
 	////地面モデルの描画
-	m_model->Draw(m_d3dContext.Get(), m_states, Matrix::Identity, m_view, m_proj);
+	//m_model->Draw(m_d3dContext.Get(), m_states, Matrix::Identity, m_view, m_proj);
+	m_obj_ground.Draw();
 
-	//タンクモデルの描画
-	m_tank_model->Draw(m_d3dContext.Get(), m_states, tank_world, m_view, m_proj);
+	m_player->Render();
+
+	////タンクモデルの描画
+	//m_tank_model->Draw(m_d3dContext.Get(), m_states, tank_world, m_view, m_proj);
 
 	////球モデルの描画
 	//for (int i = 0; i < 10; i++)

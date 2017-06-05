@@ -1,68 +1,52 @@
-//∞----------------------------------------------------∞
-//∞*ファイル名：Camera.h								∞
-//∞*内容　　　：カメラクラスのヘッダー					∞
-//∞*制作者　　：Ayaka Yamanaka							∞
-//∞*制作日時　：2017.05.11								∞
-//∞----------------------------------------------------∞
-
 #pragma once
+#include <d3d11_1.h>
 #include <SimpleMath.h>
-
-
+#include <Keyboard.h>
 
 class Camera
 {
 public:
-	Camera(int width, int height);
+	// メンバ関数
+	// コンストラクタ
+	Camera(int width,int height);
+
+	// デストラクタ
 	virtual ~Camera();
-	//更新
+
+	// 更新
 	virtual void Update();
 
-	//ビュー行列を取得する関数
-	const DirectX::SimpleMath::Matrix& GetViewMatrix();
-	//射影行列を取得する関数
-	const DirectX::SimpleMath::Matrix& GetProjMatrix();
-	//視点をセット
-	void SetEyepos(const DirectX::SimpleMath::Vector3& eyepos);
-	//参照点をセット
-	void SetRefpos(const DirectX::SimpleMath::Vector3& refpos);
-	//上方向ベクトルをセット
-	void SetUppos(const DirectX::SimpleMath::Vector3& uppos);
+	// ビュー行列を取得
+	DirectX::SimpleMath::Matrix GetViewMatrix();
 
-	//垂直方向視野角をセット
-	void SetForY(float fovY);
+	// 射影行列を取得
+	DirectX::SimpleMath::Matrix GetProjectionMatrix();
 
-	//垂直方向視野角をセット
-	void SetAspect(float aspect);
-
-	//垂直方向視野角をセット
-	void SetNearClip(float nearclip);
-
-	//垂直方向視野角をセット
-	void SetFarClip(float farclip);
+	void Seteyepos(DirectX::SimpleMath::Vector3 eyepos);
+	void Setrefpos(DirectX::SimpleMath::Vector3 refpos);
+	void Setupvec(DirectX::SimpleMath::Vector3 upvec);
+	void SetfovY(float fovY);
+	void Setaspect(float aspect);
+	void SetnearClip(float nearClip);
+	void SetfarClip(float farClip);
 
 protected:
-	//ビュー行列
-	DirectX::SimpleMath::Matrix view;
-	//どこから見るのか（視点）
-	DirectX::SimpleMath::Vector3 eyepos;
-	//どこを見るのか（注視点/参照点）
-	DirectX::SimpleMath::Vector3 refpos;
-	//どちらが画面上方向か（上方向ベクトル）
-	DirectX::SimpleMath::Vector3 upvec;
+	// メンバ変数
 
-
-	//プロジェクション行列
-	DirectX::SimpleMath::Matrix proj;
-
-	//垂直方向視野角
-	float fovY;
-	//アスペクト比（横と縦の比率）
-	float aspect;
-	//手前の表示限界距離
-	float nearclip;
-	//奥の表示限界距離
-	float farclip;
-
+	DirectX::SimpleMath::Matrix m_view;
+	DirectX::SimpleMath::Matrix m_proj;
+	// 視点
+	DirectX::SimpleMath::Vector3 m_eyepos;
+	// 参照点/注視点 
+	DirectX::SimpleMath::Vector3 m_refpos;
+	// 上方向ベクトル
+	DirectX::SimpleMath::Vector3 m_upvec;
+	// 垂直方向視野角
+	float m_fovY;
+	// アスペクト比（横・縦の比率）
+	float m_aspect;
+	// ニアクリップ（手前の表示限界距離）
+	float m_nearClip;
+	// ファークリップ（奥の表示限界距離）
+	float m_farClip;
 };
-

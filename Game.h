@@ -8,6 +8,8 @@
 #include "DebugCamera.h"
 #include "Camera.h"
 #include "FollowCamera.h"
+#include "Obj3d.h"
+#include "Player.h"
 
 #include <PrimitiveBatch.h>
 #include <VertexTypes.h>
@@ -16,6 +18,7 @@
 #include <SimpleMath.h>
 #include <Model.h>
 #include <Keyboard.h>
+#include <vector>
 
 
 // A basic game implementation that creates a D3D11 device and
@@ -84,15 +87,15 @@ private:
 	//デバッグカメラ
 	std::unique_ptr<DebugCamera> m_debugCamera;
 	//エフェクトファクトリー
-	std::unique_ptr<DirectX::EffectFactory> m_factory;
+	//std::unique_ptr<DirectX::EffectFactory> m_factory;
 	//地面モデル
-	std::unique_ptr<DirectX::Model> m_model;
+	Obj3d m_obj_ground;
 	//天球モデル
-	std::unique_ptr<DirectX::Model> m_skydome_model;
+	Obj3d m_obj_skydome;
 	//球モデル
 	std::unique_ptr<DirectX::Model> m_ball_model;
 	//タンクモデル
-	std::unique_ptr<DirectX::Model> m_tank_model;
+	//std::unique_ptr<DirectX::Model> m_tank_model;
 	//ティーポットモデル
 	std::unique_ptr<DirectX::Model> m_tea_model;
 	//ティーポットのワールド行列（外側）
@@ -105,15 +108,24 @@ private:
 	float scale;
 
 	//キーボード
-	std::unique_ptr<DirectX::Keyboard>keyboard;
+	std::unique_ptr<DirectX::Keyboard> keyboard;
 
 	//自機の座標
-	DirectX::SimpleMath::Matrix tank_world;
+	//DirectX::SimpleMath::Matrix tank_world;
+	//DirectX::SimpleMath::Matrix tank_world2;
 	DirectX::SimpleMath::Vector3 tank_pos;
 
 	float tank_rotate;
 
+	//自機の３Dオブジェクト
+	Obj3d m_ObjPlayer1;
+	Obj3d m_ObjPlayer2;
 
+
+	std::unique_ptr<Player>m_player;
+
+	//エフェクトファクトリー
+	std::unique_ptr<DirectX::EffectFactory> m_factory;
 
 
 	//球のワールド行列
@@ -124,7 +136,19 @@ private:
 	DirectX::SimpleMath::Matrix m_world_ball_out[10];
 
 	//カメラ
-	std::unique_ptr<FollowCamera> m_camera;
+	std::unique_ptr<FollowCamera> m_Camera;
 
+	int m_sinAngle;
+
+	//bool m_attack;			//攻撃フラグ
+	//int m_attack_cnt;		//攻撃カウント
+
+	//bool m_defense;			//防御フラグ
+	//int m_defense_cnt;		//防御カウント
+
+	//bool m_jump;			//ジャンプフラグ
+	//int m_jump_cnt;			//ジャンプカウント
+	//float jumping;			//方向ベクトルの初期化
+	//DirectX::SimpleMath::Vector3 vec;
 
 };
