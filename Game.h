@@ -10,6 +10,7 @@
 #include "FollowCamera.h"
 #include "Obj3d.h"
 #include "Player.h"
+#include "Enemy.h"
 
 #include <PrimitiveBatch.h>
 #include <VertexTypes.h>
@@ -46,7 +47,6 @@ public:
     void GetDefaultSize( int& width, int& height ) const;
 
 private:
-
     void Update(DX::StepTimer const& timer);
     void Render();
 
@@ -123,6 +123,7 @@ private:
 
 
 	std::unique_ptr<Player>m_player;
+	ENEMY* m_enemy[5];
 
 	//エフェクトファクトリー
 	std::unique_ptr<DirectX::EffectFactory> m_factory;

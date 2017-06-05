@@ -99,6 +99,11 @@ void Game::Initialize(HWND window, int width, int height)
 	//m_tea_model = Model::CreateFromCMO(m_d3dDevice.Get(), L"Resources/teapot.cmo", *m_factory);
 
 	m_player = std::make_unique<Player>(keyboard.get());
+
+	for (int i = 0; i < 5; i++)
+	{
+		m_enemy[i] = new ENEMY();
+	}
 }
 
 // Executes the basic game loop.
@@ -134,6 +139,10 @@ void Game::Update(DX::StepTimer const& timer)
 	}
 
 	m_player->Update();
+	for (int i = 0; i < 5; i++)
+	{
+		m_enemy[i]->Update();
+	}
 
 	m_obj_skydome.Update();
 	m_obj_ground.Update();
@@ -304,6 +313,11 @@ void Game::Render()
 	m_obj_ground.Draw();
 
 	m_player->Render();
+
+	for (int i = 0; i < 5; i++)
+	{
+		m_enemy[i]->Render();
+	}
 
 	////ƒ^ƒ“ƒNƒ‚ƒfƒ‹‚Ì•`‰æ
 	//m_tank_model->Draw(m_d3dContext.Get(), m_states, tank_world, m_view, m_proj);
