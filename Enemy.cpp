@@ -24,7 +24,7 @@ ENEMY::ENEMY()
 
 	m_ObjEnemy[ENEMY_PARTS_WEAPON].Set_perant(&m_ObjEnemy[ENEMY_PARTS_BODY]);
 
-	vec = Vector3(rand() % 100 + 1, 0, rand() % 100 + 1);
+	vec = Vector3(rand() % 50 + 1, 0, rand() % 50 + 1);
 
 	//親からのオフセット
 	m_ObjEnemy[ENEMY_PARTS_BODY].Set_trans(vec);
@@ -189,6 +189,16 @@ float ENEMY::GetShortAngleRad(float now_rot, float target_rot)
 {
 	float rotate;
 	rotate = target_rot - now_rot;
+
+	if (rotate > XM_PI)
+	{
+		rotate -= XM_2PI;
+	}
+
+	if (rotate < -XM_PI)
+	{
+		rotate += XM_2PI;
+	}
 	return rotate;
 }
 

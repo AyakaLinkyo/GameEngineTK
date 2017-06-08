@@ -14,7 +14,6 @@
 #include <Keyboard.h>
 #include <vector>
 #include "Obj3d.h"
-#include "FollowCamera.h"
 
 
 class Player 

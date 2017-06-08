@@ -93,13 +93,14 @@ void Game::Initialize(HWND window, int width, int height)
 	m_obj_ground.LoadModel(L"Resources/graund200m.cmo");
 	//天球モデルの読み込み
 	m_obj_skydome.LoadModel(L"Resources/skydome.cmo");
-	////球モデルの読み込み
-	//m_ball_model = Model::CreateFromCMO(m_d3dDevice.Get(), L"Resources/skydome_5-2.cmo", *m_factory);
-	////ティーポットの読み込み
-	//m_tea_model = Model::CreateFromCMO(m_d3dDevice.Get(), L"Resources/teapot.cmo", *m_factory);
 
+	//プレイヤーの生成
 	m_player = std::make_unique<Player>(keyboard.get());
 
+	//プレイヤーをカメラにセットする
+	m_Camera->SetPlayer(m_player.get());
+
+	//敵の生成
 	for (int i = 0; i < 5; i++)
 	{
 		m_enemy[i] = new ENEMY();
@@ -131,8 +132,6 @@ void Game::Update(DX::StepTimer const& timer)
 	m_debugCamera->Update();
 	//自機にカメラ視点がついてくる
 	{
-		m_Camera->SetTargetPos(m_player->Get_transmat());
-		m_Camera->SetTargetAngle(m_player->Get_rotate());
 		m_Camera->Update();
 		m_view = m_Camera->GetViewMatrix();
 		m_proj = m_Camera->GetProjectionMatrix();

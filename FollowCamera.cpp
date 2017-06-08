@@ -13,6 +13,7 @@ FollowCamera::FollowCamera(int width, int height)
 	m_targetAngle = 0.0f;
 	m_keyboard = nullptr;
 	m_isChangeFPS = false;
+	m_player = nullptr;
 }
 
 FollowCamera::~FollowCamera()
@@ -32,6 +33,13 @@ void FollowCamera::Update()
 		m_isChangeFPS = !m_isChangeFPS;
 	}
 
+	if (m_player)
+	{
+		//目標座標
+		SetTargetPos(m_player->Get_transmat());
+		SetTargetAngle(m_player->Get_rotate());
+	}
+	
 	if (m_isChangeFPS == true)
 	{
 		// 視点、参照点

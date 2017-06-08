@@ -2,6 +2,7 @@
 
 #include "Camera.h"
 #include <Keyboard.h>
+#include "Player.h"
 
 class FollowCamera :public Camera
 {
@@ -22,6 +23,9 @@ protected:
 	// カメラ切り替えフラグ
 	bool m_isChangeFPS;
 
+	//プレイヤー
+	Player* m_player;
+
 public:
 
 	FollowCamera(int width, int height);
@@ -38,4 +42,8 @@ public:
 
 	// キーボードをセット
 	void SetKeyboard(DirectX::Keyboard* keyboard);
+
+	// プレイヤーをセット
+	void SetPlayer(Player* player) { m_player = player; }
+
 };
