@@ -49,7 +49,10 @@ Player::Player(DirectX::Keyboard* keyboard)
 
 	//きーぼーどの初期化
 	this->keyboard = keyboard;
-
+	keyTracker = std::make_unique<Keyboard::KeyboardStateTracker>();
+	std::unique_ptr<Keyboard::KeyboardStateTracker> keyTracker(new Keyboard::KeyboardStateTracker);
+	//発射中ではない
+	m_FireFlag = false;
 }
 
 //∞----------------------------------------------------∞
@@ -75,6 +78,7 @@ void Player::Update()
 {
 	//キーボードの情報取得
 	Keyboard::State key = keyboard->GetState();
+	keyTracker->Update(key);
 
 
 	//攻撃モーション
@@ -228,6 +232,22 @@ void Player::Update()
 		//m_ObjPlayer[PLAYER_PARTS_WEAPON].Set_trans(pos + Vector3(0.5, 0.5, -1.0));
 	}
 
+	//スペースキーが押されたら（弾丸）
+	if (keyTracker->pressed.Space)
+	{
+		//もし発射中なら
+		if (m_FireFlag)
+		{
+			//パーツの位置リセット
+       		ResetBullet();
+		}
+		else if(!m_FireFlag)
+		{
+			//発射する
+			FireBullet();
+		}
+
+	}
 
 
 
@@ -235,6 +255,16 @@ void Player::Update()
 	{
 		it->Update();
 	}
+
+	//弾丸を前進
+	if(m_FireFlag)
+	{
+		Vector3 pos = m_ObjPlayer[PLAYER_PARTS_WEAPON].Get_transmat();
+		m_ObjPlayer[PLAYER_PARTS_WEAPON].Set_trans(pos + m_BulletVel);
+	}
+
+
+	//FireBullet();
 
 
 }
@@ -357,5 +387,70 @@ float Player::Get_rotate()
 DirectX::SimpleMath::Vector3 Player::Get_transmat()
 {
 	return m_ObjPlayer[PLAYER_PARTS_BODY].Get_transmat();
+}
+
+void Player::FireBullet()
+{
+	//すでに発射中
+	if (m_FireFlag)
+	{
+		return;
+	}
+	//親子関係を加味したワールド座標を取得
+	Matrix worldm = m_ObjPlayer[PLAYER_PARTS_WEAPON].Get_world();
+
+	Vector3 scale;
+	Quaternion rotq;
+	Vector3 pos;
+
+	worldm.Decompose(scale, rotq, pos);
+
+	////行列の１行ずつをVector3として扱う
+	//Vector3* m0 = (Vector3*)&worldm.m[0];
+	//Vector3* m1 = (Vector3*)&worldm.m[1];
+	//Vector3* m2 = (Vector3*)&worldm.m[2];
+	//Vector3* m3 = (Vector3*)&worldm.m[3];
+
+	////ワールド座標を取り出す
+	//pos = *m3;
+
+	////ワールドスケーリングを取り出す
+	//scale = Vector3(m0->Length(), m1->Length(), m2->Length());
+
+	////スケーリングを打ち消す
+	//m0->Normalize();
+	//m1->Normalize();
+	//m2->Normalize();
+
+	////ワールド回転を取り出す
+	//rotq = Quaternion::CreateFromRotationMatrix(worldm);
+
+	//親子関係を解除
+	m_ObjPlayer[PLAYER_PARTS_WEAPON].Set_perant(nullptr);
+	m_ObjPlayer[PLAYER_PARTS_WEAPON].Set_scale(scale);
+	m_ObjPlayer[PLAYER_PARTS_WEAPON].Set_rotateQ(rotq);
+	m_ObjPlayer[PLAYER_PARTS_WEAPON].Set_trans(pos);
+
+	//弾丸の速度を設定
+	m_BulletVel = Vector3(0, 0, -0.1f);
+	m_BulletVel = Vector3::Transform(m_BulletVel, rotq);
+
+	m_FireFlag = true;
+}
+
+void Player::ResetBullet()
+{
+	//発射中ではない
+	if (!m_FireFlag)
+	{
+		return;
+	}
+	m_ObjPlayer[PLAYER_PARTS_WEAPON].Set_perant(&m_ObjPlayer[PLAYER_PARTS_BODY]);
+
+	m_ObjPlayer[PLAYER_PARTS_WEAPON].Set_scale(Vector3(1, 1, 1));
+	m_ObjPlayer[PLAYER_PARTS_WEAPON].Set_rotate(Vector3(0, 0, 0));
+	m_ObjPlayer[PLAYER_PARTS_WEAPON].Set_trans(Vector3(0.5, 0.5, 0));
+
+	m_FireFlag = false;
 }
 

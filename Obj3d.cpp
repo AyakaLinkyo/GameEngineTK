@@ -27,7 +27,7 @@ void Obj3d::InitializeStatic(Microsoft::WRL::ComPtr<ID3D11Device> d3dDevice, Mic
 	m_d3dContext = d3dContext;
 	m_Camera = camera;
 
-	m_states=std::make_unique<CommonStates>(m_d3dDevice.Get());
+	m_states = std::make_unique<CommonStates>(m_d3dDevice.Get());
 
 	//エフェクトファクトリー生成
 	m_factory = std::make_unique<EffectFactory>(m_d3dDevice.Get());
@@ -43,12 +43,14 @@ Obj3d::Obj3d()
 
 	m_perent = nullptr;
 
+	//デフォルトではオイラー角で計算
+	m_useQuaternion = false;
 }
 
 void Obj3d::LoadModel(const wchar_t * filename)
 {
 	//モデルの読み込み
-	m_model = Model::CreateFromCMO(m_d3dDevice.Get(),filename, *m_factory);
+	m_model = Model::CreateFromCMO(m_d3dDevice.Get(), filename, *m_factory);
 
 }
 
@@ -56,13 +58,24 @@ void Obj3d::Update()
 {
 	//主に行列の計算
 	SimpleMath::Matrix scalemat = SimpleMath::Matrix::CreateScale(m_scalemat);
-	SimpleMath::Matrix rotmatZ = SimpleMath::Matrix::CreateRotationZ(m_rotmat.z);
-	SimpleMath::Matrix rotmatX = SimpleMath::Matrix::CreateRotationX(m_rotmat.x);
-	SimpleMath::Matrix rotmatY = SimpleMath::Matrix::CreateRotationY(m_rotmat.y);
 
-	SimpleMath::Matrix rotmat = rotmatZ * rotmatX * rotmatY;
+	SimpleMath::Matrix rotmat;
+	//回転行列
+	if (m_useQuaternion)
+	{//クォータニオンで回転を計算
+		rotmat = Matrix::CreateFromQuaternion(m_rotmatQ);
+	}
+	else
+	{//オイラー角で回転を計算（Z→X→Y）
+		SimpleMath::Matrix rotmatZ = SimpleMath::Matrix::CreateRotationZ(m_rotmat.z);
+		SimpleMath::Matrix rotmatX = SimpleMath::Matrix::CreateRotationX(m_rotmat.x);
+		SimpleMath::Matrix rotmatY = SimpleMath::Matrix::CreateRotationY(m_rotmat.y);
+
+		rotmat = rotmatZ * rotmatX * rotmatY;
+	}
+
 	SimpleMath::Matrix transmat = SimpleMath::Matrix::CreateTranslation(m_transmat);
-	
+
 	//ワールド行列を合成
 	m_world = scalemat*rotmat*transmat;
 
@@ -96,7 +109,15 @@ void Obj3d::Set_scale(DirectX::SimpleMath::Vector3 scalemat)
 void Obj3d::Set_rotate(DirectX::SimpleMath::Vector3 rotmat)
 {
 	m_rotmat = rotmat;
+	m_useQuaternion = false;
 }
+
+void Obj3d::Set_rotateQ(DirectX::SimpleMath::Quaternion rotmat)
+{
+	m_rotmatQ = rotmat;
+	m_useQuaternion = true;
+}
+
 
 void Obj3d::Set_trans(DirectX::SimpleMath::Vector3 transmat)
 {

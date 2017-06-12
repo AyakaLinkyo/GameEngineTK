@@ -55,6 +55,8 @@ public:
 	void Set_scale(DirectX::SimpleMath::Vector3 scalemat);
 	//回転角(XYZ）
 	void Set_rotate(DirectX::SimpleMath::Vector3 rotmat);
+	//回転角(クォータニオン）
+	void Set_rotateQ(DirectX::SimpleMath::Quaternion rotmat);
 	//平行移動（XYZ）
 	void Set_trans(DirectX::SimpleMath::Vector3 transmat);
 	//親の3Dオブジェクトのポインタ
@@ -84,6 +86,9 @@ protected:
 	//回転角(XYZ）
 	DirectX::SimpleMath::Vector3 m_rotmat;
 
+	//回転角(クォータニオン）
+	DirectX::SimpleMath::Quaternion m_rotmatQ;
+
 	//平行移動（XYZ）
 	DirectX::SimpleMath::Vector3 m_transmat;
 	
@@ -93,6 +98,8 @@ protected:
 	//親のワールド行列のポインタ
 	Obj3d* m_perent;
 
+	//クォータニオン使用フラグ
+	bool m_useQuaternion;
 	
 };
 

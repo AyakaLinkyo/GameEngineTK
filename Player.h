@@ -53,6 +53,12 @@ public:
 	//平行移動（XYZ）
 	DirectX::SimpleMath::Vector3 Get_transmat();
 
+	//任意のパーツを発射
+	void FireBullet();
+
+	//パーツを取り付けなおす
+	void ResetBullet();
+
 
 private:
 	bool m_attack;			//攻撃フラグ
@@ -73,7 +79,14 @@ private:
 
 	//キーボード
 	DirectX::Keyboard* keyboard;
+	std::unique_ptr<DirectX::Keyboard::KeyboardStateTracker> keyTracker;
 
+
+	//弾丸の速度ベクトル
+	DirectX::SimpleMath::Vector3 m_BulletVel;
+
+	//弾丸が発射中かどうか
+	bool m_FireFlag;
 
 };
 
