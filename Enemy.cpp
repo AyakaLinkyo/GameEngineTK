@@ -38,6 +38,16 @@ ENEMY::ENEMY()
 
 	m_timer = 0;
 	m_DistAngle = 0;
+
+	//当たり判定の初期化
+	{
+		m_collisionNodeBullet.Initialize();
+		//親パーツの指定
+		m_collisionNodeBullet.SetParent(&m_ObjEnemy[ENEMY_PARTS_BODY]);
+		m_collisionNodeBullet.SetTrans(Vector3(0, 1.0, 0));
+		m_collisionNodeBullet.SetLocalRadius(1.5f);
+
+	}
 }
 
 //∞----------------------------------------------------∞
@@ -102,6 +112,8 @@ void ENEMY::Update()
 		it->Update();
 	}
 
+	//当たり判定の更新
+	m_collisionNodeBullet.Update();
 
 }
 
@@ -111,6 +123,9 @@ void ENEMY::Render()
 	{
 		it->Draw();
 	}
+	//当たり判定の描画
+	m_collisionNodeBullet.Draw();
+
 
 }
 //∞----------------------------------------------------∞

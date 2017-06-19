@@ -53,6 +53,15 @@ Player::Player(DirectX::Keyboard* keyboard)
 	std::unique_ptr<Keyboard::KeyboardStateTracker> keyTracker(new Keyboard::KeyboardStateTracker);
 	//発射中ではない
 	m_FireFlag = false;
+
+	//弾丸用の当たり判定を設定
+	{
+		m_collisionNodeBullet.Initialize();
+		//親パーツの指定
+		m_collisionNodeBullet.SetParent(&m_ObjPlayer[PLAYER_PARTS_WEAPON]);
+		m_collisionNodeBullet.SetTrans(Vector3(0, 0, 0));
+		m_collisionNodeBullet.SetLocalRadius(1.0f);
+	}
 }
 
 //∞----------------------------------------------------∞
@@ -256,12 +265,16 @@ void Player::Update()
 		it->Update();
 	}
 
+	//当たり判定の更新
+	m_collisionNodeBullet.Update();
+
 	//弾丸を前進
 	if(m_FireFlag)
 	{
 		Vector3 pos = m_ObjPlayer[PLAYER_PARTS_WEAPON].Get_transmat();
 		m_ObjPlayer[PLAYER_PARTS_WEAPON].Set_trans(pos + m_BulletVel);
 	}
+
 
 
 	//FireBullet();
@@ -275,6 +288,9 @@ void Player::Render()
 	{
 		it->Draw();
 	}
+	//当たり判定の描画
+	m_collisionNodeBullet.Draw();
+
 
 }
 

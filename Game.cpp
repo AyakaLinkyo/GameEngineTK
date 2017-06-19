@@ -105,6 +105,9 @@ void Game::Initialize(HWND window, int width, int height)
 	{
 		m_enemy[i] = new ENEMY();
 	}
+
+	m_obj_ground.DisableLighting();
+	m_obj_skydome.DisableLighting();
 }
 
 // Executes the basic game loop.

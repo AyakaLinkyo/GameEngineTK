@@ -170,6 +170,7 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="FollowCamera.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="CollisionNode.h" />
     <ClInclude Include="Obj3d.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Player.h" />
@@ -178,6 +179,7 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="CollisionNode.cpp" />
     <ClCompile Include="DebugCamera.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="FollowCamera.cpp" />
@@ -216,6 +218,7 @@
     <MeshContentTask Include="Assets\skydome.FBX" />
     <MeshContentTask Include="Assets\skydome_5-2.FBX" />
     <MeshContentTask Include="Assets\skydome_5.FBX" />
+    <MeshContentTask Include="Assets\SphereNode.FBX" />
     <MeshContentTask Include="Assets\teapot.FBX" />
     <MeshContentTask Include="Assets\weapon.FBX" />
   </ItemGroup>

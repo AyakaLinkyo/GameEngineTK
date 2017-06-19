@@ -15,6 +15,8 @@
 #include <vector>
 #include "Obj3d.h"
 
+#include "CollisionNode.h"
+
 
 class Player 
 {
@@ -59,6 +61,11 @@ public:
 	//パーツを取り付けなおす
 	void ResetBullet();
 
+	const SphereNode& GetcollisionNodeBullet()
+	{
+		return m_collisionNodeBullet;
+	}
+
 
 private:
 	bool m_attack;			//攻撃フラグ
@@ -87,6 +94,9 @@ private:
 
 	//弾丸が発射中かどうか
 	bool m_FireFlag;
+
+	//弾丸用の当たり判定
+	SphereNode m_collisionNodeBullet;
 
 };
 

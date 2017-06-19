@@ -3,6 +3,9 @@
 #include "Obj3d.h"
 #include "FollowCamera.h"
 
+#include "CollisionNode.h"
+
+
 
 class ENEMY
 {
@@ -44,6 +47,11 @@ public:
 	float GetShortAngleRad(float now_rot, float target_rot);
 
 
+	const SphereNode& GetcollisionNodeBullet()
+	{
+		return m_collisionNodeBullet;
+	}
+
 private:
 	bool m_attack;			//攻撃フラグ
 	int m_attack_cnt;		//攻撃カウント
@@ -66,6 +74,9 @@ private:
 
 	int m_timer;
 	float m_DistAngle;
+
+	//弾丸用の当たり判定
+	SphereNode m_collisionNodeBullet;
 
 
 };

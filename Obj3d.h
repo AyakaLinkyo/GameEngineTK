@@ -75,6 +75,8 @@ public:
 	//ワールド行列
 	DirectX::SimpleMath::Matrix Get_world();
 
+	void DisableLighting();
+
 protected:
 	//メンバー変数
 	//3Dモデル
